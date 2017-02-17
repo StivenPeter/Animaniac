@@ -29,8 +29,9 @@ var anime = function() {
     console.log(requestID);
 
     //init params for drawing dot
-    var radius = 50;
+    var radius = 0;
     var xcor = c.width / 2;
+    var grow = True; 
     
     //Q: what happens w/ & w/o next line?
     //window.cancelAnimationFrame( requestID );
@@ -41,14 +42,18 @@ var anime = function() {
 	ctx.clearRect( 0, 0, c.width, c.height );
 	
 	ctx.beginPath();
-	ctx.arc( xcor, 150, radius, 0, 2 * Math.PI );
+	ctx.arc( xcor, c.height/2, radius, 0, 2 * Math.PI );
 	ctx.stroke();
 	ctx.fill();
-
-	xcor++;
-
+	radius++;
 	requestID = window.requestAnimationFrame( drawDot );
     };
+    var increase = function() {
+	radius++;
+};
+    var decrease = function() {
+	radius--;
+};
     drawDot();
 };
 
