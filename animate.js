@@ -11,7 +11,7 @@ var ctx = c.getContext("2d");
 ctx.fillStyle = "#ff0000";
 
 
-var requestID;
+var requestID= 0;
 
 
 var clear = function(e) {
@@ -85,14 +85,74 @@ var animeDvd = function() {
     drawDot();
 };
 
+var animateDVD = function() {
+	img = new Image();
+	img.src = 'dvd.png';
+	var recx = 160;
+	var recy = 70;
+	var x = Math.random()*(c.width-recx);
+	var y = Math.random()*(c.height-recy);
+	window.cancelAnimationFrame(requestID);
+
+	var MakeRec = function(x,y) {
+		ctx.clearRect(0, 0, c.width, c.height);
+		ctx.drawImage(img,x,y,recx,recy);
+	};
+	var MoveRightDown = function() {			
+		MakeRec(x,y);
+		x++;
+		y++;
+		if (x >= c.width-recx)
+			return MoveLeftDown();
+		if (y >= c.height-recy)
+			return MoveRightUp();
+		requestID = window.requestAnimationFrame(MoveRightDown);
+	};
+	var MoveRightUp = function() {			
+		MakeRec(x,y);
+		x++;
+		y--;
+		if (y <= 0)
+			return MoveRightDown();
+		if (x >= c.width-recx)
+			return MoveLeftUp();
+		requestID = window.requestAnimationFrame(MoveRightUp);
+	};
+
+
+	
+	var MoveLeftUp = function() {			
+		MakeRec(x,y);
+		x--;
+		y--;
+		if (x <= 0)
+			return MoveRightUp();
+		if (y <= 0)
+			return MoveLeftDown();
+		requestID = window.requestAnimationFrame(MoveLeftUp);
+	};
+		var MoveLeftDown = function() {			
+		MakeRec(x,y);
+		x--;
+		y++;
+		if (y >= c.height-recy)
+			return MoveLeftUp();
+		if (x <= 0)
+			return MoveRightDown();
+		requestID = window.requestAnimationFrame(MoveLeftDown);
+	};
+	MoveLeftDown();
+};
+
 var stopIt = function() {
     console.log( requestID );
     window.cancelAnimationFrame( requestID );
 };
 
+document.getElementById('dvd').addEventListener('click', animateDVD);
 
 //tie click-on-canvas to anime function
-c.addEventListener( "click", anime )
+document.getElementById('circle').addEventListener( "click", anime );
 
 //ideally, clicking stop will make the animation stop
 stopButton.addEventListener( "click", stopIt );
