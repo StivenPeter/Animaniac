@@ -8,7 +8,7 @@ var stopButton = document.getElementById( "stop" );
 var ctx = c.getContext("2d");
 
 //set fill color to lello
-ctx.fillStyle = "#ffff00";
+ctx.fillStyle = "#ff0000";
 
 
 var requestID;
@@ -31,7 +31,7 @@ var anime = function() {
     //init params for drawing dot
     var radius = 0;
     var xcor = c.width / 2;
-    var grow = True; 
+    var grow = true;
     
     //Q: what happens w/ & w/o next line?
     //window.cancelAnimationFrame( requestID );
@@ -45,18 +45,45 @@ var anime = function() {
 	ctx.arc( xcor, c.height/2, radius, 0, 2 * Math.PI );
 	ctx.stroke();
 	ctx.fill();
-	radius++;
+	if (radius != c.width/2 && grow)
+		radius++;
+	if (radius == c.width/2)
+		grow = false;
+	if (radius != 0 && grow == false)
+		radius --; 
+	if (radius == 0)
+		grow = true;
 	requestID = window.requestAnimationFrame( drawDot );
     };
-    var increase = function() {
-	radius++;
-};
-    var decrease = function() {
-	radius--;
-};
+
     drawDot();
 };
+var animeDvd = function() {
+	
+    window.cancelAnimationFrame( requestID );
+	
+    console.log(requestID);
 
+    //init params for drawing dot
+    var xcor = c.width / 2;
+    var grow = true;
+    
+    //Q: what happens w/ & w/o next line?
+    //window.cancelAnimationFrame( requestID );
+
+    var moveDvd = function() {
+	console.log( requestID )
+
+	ctx.clearRect( 0, 0, c.width, c.height );
+	
+	ctx.beginPath();
+	ctx.stroke();
+	ctx.fill();
+	requestID = window.requestAnimationFrame( drawDot );
+    };
+
+    drawDot();
+};
 
 var stopIt = function() {
     console.log( requestID );
